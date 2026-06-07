@@ -13,7 +13,7 @@ import re
 from PySide6 import QtCore
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCursor
-from PySide6.QtWidgets import QTextEdit
+from PySide6.QtWidgets import QToolTip
 
 import Lugwit_Module as LM
 lprint = LM.lprint
@@ -341,6 +341,13 @@ class CodeEditorWithCompletion(LineNumberTextEdit):
             # 调用父类处理正常按键（包括 LineNumberTextEdit 的图片粘贴等）
             super().keyPressEvent(event)
 
+            # 输入 ( 后显示函数签名提示
+            if event.text() == '(':
+                self._show_signature_hint()
+            # 输入 ) 或按 Esc 时隐藏签名提示
+            elif event.text() == ')':
+                QToolTip.hideText()
+
             # 输入 . 后自动显示补全
             if event.text() == '.':
                 self.show_completions()
@@ -352,6 +359,49 @@ class CodeEditorWithCompletion(LineNumberTextEdit):
 
         except Exception as e:
             lprint(f"[按键事件] 异常: {str(e)}")
+
+    # ------------------------------------------------------------------
+    # 函数签名提示
+    # ------------------------------------------------------------------
+
+    def _show_signature_hint(self):
+        """输入 ``(`` 后，检查左侧是否是已知函数名，若是则显示签名 tooltip。"""
+        try:
+            cursor = self.textCursor()
+            pos = cursor.position()
+            # 向左扫描，跳过空白，取函数名
+            cursor.setPosition(max(0, pos - 1))  # 跳过刚输入的 (
+            cursor.setPosition(max(0, pos - 60), QTextCursor.MoveMode.KeepAnchor)
+            text_before = cursor.selectedText().rstrip()
+
+            # 从右向左提取函数名
+            match = re.search(r'(\w+)\s*$', text_before)
+            if not match:
+                return
+            func_name = match.group(1)
+
+            sig = self.completer.get_signature(func_name)
+            if not sig:
+                return
+
+            # 显示 tooltip
+            global_pos = self.mapToGlobal(self.cursorRect().bottomRight())
+            # 设置 tooltip 样式（暗色主题）
+            QToolTip.setStyleSheet(
+                "QToolTip {"
+                "  background-color: #2d2d2d;"
+                "  color: #d4d4d4;"
+                "  border: 1px solid #555;"
+                "  padding: 6px;"
+                "  font-family: Consolas, monospace;"
+                "  font-size: 12px;"
+                "}"
+            )
+            QToolTip.showText(global_pos, sig, self, self.cursorRect(), 8000)
+
+        except Exception as e:
+            if self.debug_mode:
+                lprint(f"[签名提示] 异常: {e}")
 
     # ------------------------------------------------------------------
     # 补全显示

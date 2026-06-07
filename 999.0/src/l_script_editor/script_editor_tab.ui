@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ScriptEditorTab</class>
+ <widget class="QWidget" name="ScriptEditorTab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1375</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>脚本编辑器</string>
+  </property>
+  <layout class="QVBoxLayout" name="root_layout">
+   <property name="spacing">
+    <number>3</number>
+   </property>
+   <property name="leftMargin">
+    <number>4</number>
+   </property>
+   <property name="topMargin">
+    <number>4</number>
+   </property>
+   <property name="rightMargin">
+    <number>4</number>
+   </property>
+   <property name="bottomMargin">
+    <number>4</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="toolbar_layout">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <layout class="QHBoxLayout" name="row1_layout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="row2_layout">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="new_tab_btn">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>新建代码 Tab (Ctrl+N)</string>
+           </property>
+           <property name="text">
+            <string>+ 新建</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="close_tab_btn">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>关闭当前 Tab (Ctrl+W)</string>
+           </property>
+           <property name="text">
+            <string>关闭</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="rename_tab_btn">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>重命名当前 Tab</string>
+           </property>
+           <property name="text">
+            <string>重命名</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="history_btn">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>浏览/恢复当前 Tab 的历史版本</string>
+           </property>
+           <property name="text">
+            <string>历史</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="favorites_btn">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>收藏当前代码片段，可设置名称快速访问</string>
+           </property>
+           <property name="text">
+            <string>收藏</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="save_btn">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>保存所有 Tab 的代码 (Ctrl+S)</string>
+           </property>
+           <property name="text">
+            <string>保存</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="row2_stretch">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="run_btn">
+         <property name="maximumSize">
+          <size>
+           <width>150</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>执行选中的代码或全部代码</string>
+         </property>
+         <property name="text">
+          <string>执行 (Ctrl+Enter)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clear_output_btn">
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>清空输出</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clear_code_btn">
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>清空代码</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="execute_file_btn">
+         <property name="maximumSize">
+          <size>
+           <width>120</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>选择并执行 Python 文件</string>
+         </property>
+         <property name="text">
+          <string>执行文件...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="row1_spacer1">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="show_code_checkbox">
+         <property name="toolTip">
+          <string>是否在输出窗口显示执行的源代码</string>
+         </property>
+         <property name="text">
+          <string>显示源码</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="auto_clear_output_checkbox">
+         <property name="toolTip">
+          <string>执行代码前自动清空输出窗口</string>
+         </property>
+         <property name="text">
+          <string>执行时清空输出</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="debug_mode_checkbox">
+         <property name="toolTip">
+          <string>启用补全调试日志</string>
+         </property>
+         <property name="text">
+          <string>调试模式</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="trace_execution_checkbox">
+         <property name="toolTip">
+          <string>执行代码时追踪调用栈，执行完毕后自动关闭</string>
+         </property>
+         <property name="text">
+          <string>追踪</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="shortcuts_enabled_checkbox">
+         <property name="toolTip">
+          <string>启用快捷转换（lp-&gt;lprint 等）</string>
+         </property>
+         <property name="text">
+          <string>快捷转换</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="row1_stretch">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="hint_label">
+         <property name="styleSheet">
+          <string>color: gray; font-size: 11px;</string>
+         </property>
+         <property name="text">
+          <string>提示：可使用 import 导入需要的模块</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="reload_btn">
+         <property name="maximumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>重载脚本编辑器模块</string>
+         </property>
+         <property name="text">
+          <string>⟳</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QWidget" name="code_container">
+      <layout class="QVBoxLayout" name="code_layout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTabWidget" name="code_tab_widget">
+         <property name="tabsClosable">
+          <bool>true</bool>
+         </property>
+         <property name="movable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="output_container">
+      <layout class="QVBoxLayout" name="output_layout">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="output_label">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string>font-weight: bold; color: #CCCCCC;</string>
+         </property>
+         <property name="text">
+          <string>输出:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="output_text">
+         <property name="styleSheet">
+          <string>QPlainTextEdit {
+    background-color: #2b2b2b;
+    color: #f0f0f0;
+    border: 1px solid #555;
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+    font-size: 10pt;
+}</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

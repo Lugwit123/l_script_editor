@@ -22,7 +22,48 @@ class CodeCompleter(QCompleter):
     - Python 关键字 + 内置函数补全
     - 可注入自定义 API 树（树形结构，支持逐级补全）
     - 快捷转换映射（lp -> lprint, p -> print 等）
+    - 函数签名提示（输入 ``(`` 后显示参数提示）
     """
+
+    # 内置函数签名数据库（用于参数提示 tooltip）
+    BUILTIN_SIGNATURES = {
+        'lprint': (
+            'lprint(*args, **kwargs)\n'
+            '常用 kwargs:\n'
+            '  level      = "WARNING"  | "DEBUG" | "INFO" | "ERROR"\n'
+            '  log_group  = None        # 日志分组\n'
+            '  trace_depth= None        # 调用栈追溯深度\n'
+            '  force_print= False       # 强制打印\n'
+            '  max_length = 800         # 单行最大长度\n'
+            '  oneLine    = False       # 单行输出\n'
+            '  popui      = False       # 弹窗显示'
+        ),
+        'print': 'print(*args, sep=" ", end="\\n", file=sys.stdout, flush=False)',
+        'len': 'len(obj) -> int',
+        'type': 'type(obj) -> type',
+        'dir': 'dir([obj]) -> list[str]',
+        'isinstance': 'isinstance(obj, classinfo) -> bool',
+        'getattr': 'getattr(obj, name[, default]) -> Any',
+        'setattr': 'setattr(obj, name, value)',
+        'hasattr': 'hasattr(obj, name) -> bool',
+        'enumerate': 'enumerate(iterable, start=0)',
+        'range': 'range(stop) / range(start, stop[, step])',
+        'sorted': 'sorted(iterable, *, key=None, reverse=False) -> list',
+        'open': 'open(file, mode="r", encoding=None, ...) -> IO',
+        'zip': 'zip(*iterables) -> iterator',
+        'map': 'map(func, *iterables) -> iterator',
+        'filter': 'filter(func, iterable) -> iterator',
+        'super': 'super([type[, obj]])',
+        'property': 'property(fget=None, fset=None, fdel=None, doc=None)',
+        'int': 'int(x=0) / int(x, base=10)',
+        'float': 'float(x=0.0)',
+        'str': 'str(obj="")',
+        'bool': 'bool(obj=False)',
+        'list': 'list(iterable=())',
+        'dict': 'dict(**kwargs) / dict(mapping, **kwargs)',
+        'set': 'set(iterable=())',
+        'tuple': 'tuple(iterable=())',
+    }
 
     def __init__(self, parent=None):
         super(CodeCompleter, self).__init__(parent)
@@ -172,3 +213,34 @@ class CodeCompleter(QCompleter):
         """刷新补全列表"""
         lprint("[代码补全] 刷新补全列表...")
         self.setup_completions()
+
+    # ------------------------------------------------------------------
+    # 函数签名提示
+    # ------------------------------------------------------------------
+
+    def get_signature(self, func_name: str) -> str:
+        """获取函数签名提示文本。
+
+        Parameters
+        ----------
+        func_name : str
+            函数名称（如 ``"lprint"``）。
+
+        Returns
+        -------
+        str
+            签名文本，未找到时返回空字符串。
+        """
+        return self.BUILTIN_SIGNATURES.get(func_name, '')
+
+    def add_signature(self, func_name: str, signature: str):
+        """注册自定义函数签名。
+
+        Parameters
+        ----------
+        func_name : str
+            函数名称。
+        signature : str
+            签名提示文本（支持多行）。
+        """
+        self.BUILTIN_SIGNATURES[func_name] = signature

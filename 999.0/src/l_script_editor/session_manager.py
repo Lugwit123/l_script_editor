@@ -8,6 +8,7 @@
 from __future__ import print_function, unicode_literals
 
 import datetime
+import glob
 import json
 import os
 from typing import Callable, Optional
@@ -25,8 +26,9 @@ class SessionManager:
     - 清空会话文件
     """
 
-    def __init__(self, session_file: str):
+    def __init__(self, session_file: str, history_dir: str = ""):
         self.session_file = session_file
+        self.history_dir = history_dir or os.path.expanduser("~/.Lugwit/config/.history")
 
         # 确保配置目录存在
         session_dir = os.path.dirname(self.session_file)
@@ -92,6 +94,9 @@ class SessionManager:
     def restore_session(self, tab_widget, create_tab_fn: Callable) -> bool:
         """恢复上次的会话状态
 
+        优先从历史版本目录读取每个 tab 的最新 .py 文件，
+        如果没有历史记录则降级使用 session JSON 中的 content 字段。
+
         Parameters
         ----------
         tab_widget : QTabWidget
@@ -124,9 +129,14 @@ class SessionManager:
             # 恢复每个 tab
             restored_tabs = []
             for tab_info in session_data["tabs"]:
-                tab_name = tab_info.get("name", f"代码 {len(restored_tabs) + 1}")
+                tab_name = tab_info.get("name", f"code_{len(restored_tabs) + 1}")
                 tab_content = tab_info.get("content", "")
                 cursor_pos = tab_info.get("cursor_position", 0)
+
+                # 优先从历史版本目录读取最新文件
+                latest_code = self._read_latest_history(tab_name)
+                if latest_code is not None:
+                    tab_content = latest_code
 
                 editor = create_tab_fn(tab_name, False)
                 if editor:
@@ -150,6 +160,34 @@ class SessionManager:
         except Exception as e:
             lprint(f"[会话管理] 恢复会话失败: {str(e)}")
             return False
+
+    def _read_latest_history(self, tab_name: str) -> Optional[str]:
+        """从历史版本目录读取指定 tab 的最新代码文件内容。
+
+        Parameters
+        ----------
+        tab_name : str
+            Tab 名称。
+
+        Returns
+        -------
+        Optional[str]
+            代码内容，无历史记录时返回 None。
+        """
+        safe_name = "".join(c if c.isalnum() or c in "._-" else "_" for c in tab_name) or "tab"
+        tab_dir = os.path.join(self.history_dir, safe_name)
+        if not os.path.isdir(tab_dir):
+            return None
+        pattern = os.path.join(tab_dir, f"{safe_name}_*.py")
+        files = sorted(glob.glob(pattern), reverse=True)
+        if not files:
+            return None
+        try:
+            with open(files[0], "r", encoding="utf-8") as f:
+                return f.read()
+        except Exception as e:
+            lprint(f"[会话管理] 读取历史版本失败 {files[0]}: {e}")
+            return None
 
     # ------------------------------------------------------------------
     # 清空 / 信息

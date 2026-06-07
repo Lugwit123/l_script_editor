@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HistoryDialog</class>
+ <widget class="QDialog" name="HistoryDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>550</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>历史版本管理</string>
+  </property>
+  <layout class="QVBoxLayout" name="main_layout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="leftMargin">
+    <number>10</number>
+   </property>
+   <property name="topMargin">
+    <number>10</number>
+   </property>
+   <property name="rightMargin">
+    <number>10</number>
+   </property>
+   <property name="bottomMargin">
+    <number>10</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="top_layout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="tab_label">
+       <property name="text">
+        <string>选择 Tab:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="tab_combo">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QListWidget" name="version_list">
+      <property name="maximumSize">
+       <size>
+        <width>280</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPlainTextEdit" name="preview_text">
+      <property name="styleSheet">
+       <string>QPlainTextEdit {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    border: 1px solid #404040;
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+    font-size: 10pt;
+}</string>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="btn_layout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="open_dir_btn">
+       <property name="text">
+        <string>打开目录</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="delete_btn">
+       <property name="text">
+        <string>删除</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cleanup_dup_btn">
+       <property name="text">
+        <string>清理重复</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="btn_spacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="new_tab_btn">
+       <property name="text">
+        <string>新建Tab</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="restore_btn">
+       <property name="text">
+        <string>覆盖当前Tab</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="close_btn">
+       <property name="text">
+        <string>关闭</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>close_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>HistoryDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>750</x>
+     <y>520</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>400</x>
+     <y>275</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
